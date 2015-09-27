@@ -34,7 +34,7 @@ import java.util.List;
  * Forecast Fragment - the list of 7 days weather forecast.
  */
 public class ForecastFragment extends Fragment {
-    private ArrayAdapter adapter;
+    private ArrayAdapter mAdapter;
 
     public ForecastFragment() {
     }
@@ -60,9 +60,9 @@ public class ForecastFragment extends Fragment {
                 "Sun 6/29 - Sunny - 20/7"
         };
         List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.list_item_forcast, R.id.list_item_forcast_textview, weekForecast);
+        mAdapter = new ArrayAdapter(getActivity(), R.layout.list_item_forcast, R.id.list_item_forcast_textview, weekForecast);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forcast);
-        listView.setAdapter(adapter);
+        listView.setAdapter(mAdapter);
 
         return rootView;
     }
@@ -282,6 +282,16 @@ public class ForecastFragment extends Fragment {
                 Log.e(LOG_TAG, "cannot parse JSON", e);
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String[] strings) {
+            if (strings != null) {
+                mAdapter.clear();
+                for (String s : strings) {
+                    mAdapter.add(s);
+                }
+            }
         }
     }
 }
